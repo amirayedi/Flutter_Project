@@ -68,7 +68,7 @@ class _RendezVousState extends State<RendezVous> {
           children: <Widget>[
             const SizedBox(width: 47),
             Text("${dateTime.day}/${dateTime.month}/${dateTime.year} - ${dateTime.hour}:${dateTime.minute}"),
-            const SizedBox(width: 180),
+            const SizedBox(width: 110),
             TextButton(
                 onPressed: () async {
                   DateTime? newDate = await showDatePicker(

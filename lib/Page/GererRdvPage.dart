@@ -1,25 +1,17 @@
-
 import 'package:flutter/material.dart';
-import 'package:flutterproject/Model/User.dart';
-import 'package:flutterproject/Page/AddSecretaire.dart';
-import 'package:flutterproject/Page/UpdateSecretaire.dart';
-import 'package:flutterproject/Service/UserService.dart';
-import 'package:flutterproject/drawer.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
+import 'package:flutterproject/Model/RendezVous.dart';
+import 'package:flutterproject/Service/PatientService.dart';
 
-class GestionSecretaire extends StatefulWidget {
+class GererRdvPage extends StatefulWidget {
   @override
-  _GestionSecretairePage createState() => _GestionSecretairePage();
+  _GererRdvPageState createState() => _GererRdvPageState();
 }
-class _GestionSecretairePage extends State<GestionSecretaire>
-    with AutomaticKeepAliveClientMixin<GestionSecretaire> {
+class _GererRdvPageState extends State<GererRdvPage>
+    with AutomaticKeepAliveClientMixin<GererRdvPage> {
+  PatientService patientService = new PatientService();
 
 
-  UserService userService = new UserService();
-
-
-  Future<List<User>>? user;
+  Future<List<RendezVous>>? rendezVous;
 
 
 
@@ -31,7 +23,7 @@ class _GestionSecretairePage extends State<GestionSecretaire>
 
   void getUser() async {
 
-    user = userService.getAllSecretaire();
+    rendezVous = patientService.getAllRDV();
     setState(() {
     });
 
@@ -42,11 +34,10 @@ class _GestionSecretairePage extends State<GestionSecretaire>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: DrawerScreen(),
       appBar: AppBar(title: const Text("List Secretaires")),
       body: Container(
-        child: FutureBuilder<List<User>>(
-            future: user,
+        child: FutureBuilder<List<RendezVous>>(
+            future: rendezVous,
             builder: (context, snapshot){
               if (snapshot.hasData) {
                 return Column(
@@ -62,10 +53,10 @@ class _GestionSecretairePage extends State<GestionSecretaire>
                               children: <Widget>[
                                 TextButton(
                                   onPressed: () {
-                                    Navigator.push(
+                                   /* Navigator.push(
                                       context,
                                       MaterialPageRoute(builder: (context) =>  UpdateSecretaire(user : snapshot.data![index])),
-                                    );
+                                    );*/
                                   },
                                   child: Text("Modifier"),
                                 ),
@@ -73,7 +64,7 @@ class _GestionSecretairePage extends State<GestionSecretaire>
                                 // add space between buttons
                                 TextButton(
                                   onPressed: () {
-                                    userService.deleteUser(snapshot.data![index].id);
+                                  //  userService.deleteUser(snapshot.data![index].id);
                                   },
                                   child: Text("Supprimer"),
                                 ),
@@ -84,15 +75,6 @@ class _GestionSecretairePage extends State<GestionSecretaire>
                       ),
                     ),
 
-                    TextButton(
-                      child: Text('Ajouter'),
-                      onPressed: () => {
-                      Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) =>  AddSecretaire()),
-                      ),
-                      },
-                    ),
                   ],
                 );
               } else if (snapshot.hasError) {
@@ -101,8 +83,8 @@ class _GestionSecretairePage extends State<GestionSecretaire>
                 return CircularProgressIndicator();
               }
             }),
-        ),
-      );
+      ),
+    );
 
   }
 
@@ -110,5 +92,3 @@ class _GestionSecretairePage extends State<GestionSecretaire>
   // TODO: implement wantKeepAlive
   bool get wantKeepAlive => true;
 }
-
-
